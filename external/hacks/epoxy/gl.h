@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 
 #define GL_BGRA GL_BGRA_EXT
+#define GL_DRAW_FRAMEBUFFER GL_FRAMEBUFFER
+#define GL_READ_FRAMEBUFFER GL_FRAMEBUFFER
+#define GL_READ_FRAMEBUFFER_BINDING GL_FRAMEBUFFER
 #define glUniform1uiv glsl_uniform1uiv
 #define glUniform2uiv glsl_uniform2uiv
 #define glUniform3uiv glsl_uniform3uiv
