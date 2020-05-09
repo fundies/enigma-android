@@ -12,7 +12,7 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 
 LOCAL_C_INCLUDES += $(ENIGMA_ROOT)/shared $(ENIGMA_SHELL)/Bridges/OpenGLES/ $(EXTERNAL)/SDL2/include/ $(EXTERNAL)/glad/gles2/include $(EXTERNAL)/glm $(ENIGMA_SHELL)/Platforms/SDL/fileio /tmp/ENIGMA
 LOCAL_CFLAGS := -DDEBUG_MODE -DENIGMA_PLATFORM_SDL
-LOCAL_CPP_FLAGS := -stdlib=libc++ -std=c++11
+LOCAL_CPPFLAGS := -stdlib=libc++ -std=c++17
 
 LOCAL_SRC_FILES := $(addprefix $(ENIGMA_SHELL)/, $(shell cat $(WORKDIR)/sources.list)) $(EXTERNAL)/glad/gles2/src/glad.c
 
