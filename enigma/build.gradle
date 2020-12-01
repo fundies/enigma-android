@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
-    ndkVersion "22.0.6917172-beta1"
+    ndkVersion "22.0.6917172"
     defaultConfig {
         applicationId "enigma.game"
         minSdkVersion 19
