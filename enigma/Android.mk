@@ -1,22 +1,22 @@
-ENIGMA_ROOT := $(call my-dir)/../../
+ENIGMA_ROOT := $(shell realpath $$PWD/../../)
 ENIGMA_SHELL := $(ENIGMA_ROOT)/ENIGMAsystem/SHELL
 EXTERNAL := $(ENIGMA_ROOT)/android/external
 WORKDIR := /tmp/ENIGMA
 
-include $(EXTERNAL)/SDL2/Android.mk
+include $(WORKDIR)/build.makefiles
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := enigma
 
-LOCAL_C_INCLUDES := $(ENIGMA_SHELL) $(ENIGMA_SHELL)/Graphics_Systems/OpenGLES/wrappers $(EXTERNAL)/hacks $(EXTERNAL)/libepoxy/include/
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES) 
+IGNORE_WARNINGS := -Wno-unused-parameter -Wno-ignored-qualifiers  -Wno-dollar-in-identifier-extension
 
-LOCAL_C_INCLUDES += $(ENIGMA_ROOT)/shared $(ENIGMA_SHELL)/Bridges/OpenGLES/ $(EXTERNAL)/SDL2/include/ $(EXTERNAL)/glad/gles2/include $(EXTERNAL)/glm $(ENIGMA_SHELL)/Platforms/SDL/fileio /tmp/ENIGMA
-LOCAL_CFLAGS := -DDEBUG_MODE -DENIGMA_PLATFORM_SDL
-LOCAL_CPPFLAGS := -stdlib=libc++ -std=c++17
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
+LOCAL_CFLAGS :=  $(shell cat $(WORKDIR)/build.cflags) $(IGNORE_WARNINGS)
+LOCAL_CPPFLAGS := -stdlib=libc++ -I$(EXTERNAL)/hacks $(shell cat $(WORKDIR)/build.cxxflags | sed "s#-I\\([^/]\\)#-I$(ENIGMA_SHELL)/\\1#g") $(IGNORE_WARNINGS)
 
-LOCAL_SRC_FILES := $(addprefix $(ENIGMA_SHELL)/, $(shell cat $(WORKDIR)/sources.list))
+LOCAL_SRC_FILES := $(shell for i in $(shell cat $(WORKDIR)/sources.list); do echo $$i | sed "s#\\(^[^/]\\)#$(ENIGMA_SHELL)/\\1#g"; done | xargs echo)
 
-LOCAL_SHARED_LIBRARIES := SDL2
-LOCAL_LDLIBS := -lGLESv2 -llog -lz
+LOCAL_SHARED_LIBRARIES := $(shell cat $(WORKDIR)/build.libs)
+LOCAL_LDLIBS := $(shell cat $(WORKDIR)/build.ldlibs) -llog -lz
 include $(BUILD_SHARED_LIBRARY)
