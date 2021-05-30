@@ -1,7 +1,9 @@
-ENIGMA_ROOT := $(shell realpath $$PWD/../../)
+ENIGMA_ROOT := $(call my-dir)/../../
 ENIGMA_SHELL := $(ENIGMA_ROOT)/ENIGMAsystem/SHELL
 EXTERNAL := $(ENIGMA_ROOT)/android/external
 WORKDIR := /tmp/ENIGMA
+
+FIX_PATHS := $(shell bash -c "$(ENIGMA_ROOT)/android/fix_paths.sh $(WORKDIR) $(ENIGMA_SHELL) $(ENIGMA_ROOT)")
 
 include $(WORKDIR)/build.makefiles
 
@@ -13,10 +15,10 @@ IGNORE_WARNINGS := -Wno-unused-parameter -Wno-ignored-qualifiers  -Wno-dollar-in
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
 LOCAL_CFLAGS :=  $(shell cat $(WORKDIR)/build.cflags) $(IGNORE_WARNINGS)
-LOCAL_CPPFLAGS := -stdlib=libc++ -I$(EXTERNAL)/hacks $(shell cat $(WORKDIR)/build.cxxflags | sed "s#-I\\([^/]\\)#-I$(ENIGMA_SHELL)/\\1#g") $(IGNORE_WARNINGS)
+LOCAL_CPPFLAGS := -stdlib=libc++ -I$(EXTERNAL)/hacks $(shell cat $(WORKDIR)/build.cxxflags) $(IGNORE_WARNINGS)
 
-LOCAL_SRC_FILES := $(shell for i in $(shell cat $(WORKDIR)/sources.list); do echo $$i | sed "s#\\(^[^/]\\)#$(ENIGMA_SHELL)/\\1#g"; done | xargs echo)
+LOCAL_SRC_FILES := $(shell cat $(WORKDIR)/sources.list)
 
-LOCAL_SHARED_LIBRARIES := $(shell cat $(WORKDIR)/build.libs)
-LOCAL_LDLIBS := $(shell cat $(WORKDIR)/build.ldlibs) -llog -lz
+LOCAL_SHARED_LIBRARIES := $(shell cat $(WORKDIR)/libs.in)
+LOCAL_LDLIBS := $(shell cat $(WORKDIR)/ldlibs.in) -llog -lz
 include $(BUILD_SHARED_LIBRARY)
