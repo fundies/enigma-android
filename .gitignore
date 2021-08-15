@@ -2,3 +2,4 @@
 .gradle
 .idea
 enigma/src/main/assets/resources.res
+enigma/build.gradle

@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
-    ndkVersion "22.0.6917172"
+    compileSdkVersion %ANDROID_API_LEVEL%
+    ndkVersion "%ANDROID_NDK_VERSION%"
     defaultConfig {
         applicationId "enigma.game"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion %ANDROID_API_LEVEL%
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
